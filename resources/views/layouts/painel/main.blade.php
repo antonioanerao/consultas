@@ -57,6 +57,7 @@
 </script>
 
 
+@yield('modals')
 <script src="{{ asset('dashboard/assets/js/popper.min.js') }}"></script>
 <script src="{{ asset('dashboard/assets/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('dashboard/assets/js/jquery.core.js') }}"></script>

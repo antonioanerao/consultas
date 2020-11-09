@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\EmpresaController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\UserController;
+use App\Models\Especialidade;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +28,15 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['prefix' => 'painel'], function() {
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::resource('consulta', ConsultaController::class);
+    Route::resource('especialidade', EspecialidadeController::class);
+
+    /* Retornos Json */
+    Route::get('lista-especialidade-json', function() {
+        if(!auth()->guest()) {
+            $data = Especialidade::where('user_id', '=', auth()->user()->id)->orderBy('nomeEspecialidade', 'desc')->get();
+            return response()->json($data, 200);
+        }
+        return response()->json('error', '200');
+    });
 });

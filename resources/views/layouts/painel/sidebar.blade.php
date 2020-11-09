@@ -12,12 +12,12 @@
 
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect waves-primary">
-                        <i class="ti-list"></i><span> Menu 01 </span>
+                        <i class="ti-list"></i><span> Consultas </span>
                         <span class="menu-arrow"></span>
 
                     </a>
                     <ul class="list-unstyled">
-                        <li><a href="">Sub 01</a></li>
+                        <li><a href="{{ route('consulta.create') }}">Cadastrar</a></li>
                     </ul>
                 </li>
 
