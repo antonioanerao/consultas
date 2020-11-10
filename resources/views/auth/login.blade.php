@@ -23,7 +23,7 @@
 <div class="wrapper-page">
 
     <div class="text-center">
-        <a href="{{ route('home') }}" class="logo-lg">
+        <a href="{{ route('dashboard') }}" class="logo-lg">
             {{ env('APP_NAME') }}
         </a> <br> <br>
     </div>

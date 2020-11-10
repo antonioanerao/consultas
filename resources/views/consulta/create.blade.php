@@ -65,6 +65,41 @@
             </div>
         </div>
     </div><!-- /.modal -->
+
+    <!-- Adicionar Remédio -->
+    <div id="adicionar-remedio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Adicionar Novo Remédio</h4>
+                </div>
+                <form  id="add-remedio">
+                    {{ csrf_field() }} {{ method_field('POST') }}
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="field-1" class="control-label">Remédio</label>
+                                    <input type="text" required name="nomeRemedio" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="field-1" class="control-label">Informação Adicional</label>
+                                    <textarea type="text" rows="5" name="conteudoRemedio" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal -->
 @endsection
 
 @section('title')
@@ -89,17 +124,27 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <b>{{ Form::label('idEspecialidade', 'Especialidade') }}</b>
-                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge" data-toggle="modal" data-target="#adicionar-especialidade"><i class="fa fa-plus"></i></button>
-                                {!! Form::select('idEspecialidade', $especialidades, null,  ['class' => 'form-control selectpicker dropup', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idEspecialidade' ]) !!}
+                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-especialidade"><i class="fa fa-plus"></i> Adicionar</button>
+                                {!! Form::select('idEspecialidade', $listaEspecialidades, null,  ['class' => 'form-control selectpicker dropup', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idEspecialidade' ]) !!}
                             </div>
 
                             <div class="form-group">
                                 <b>{{ Form::label('sintoma', 'Escolha ao menos um sintoma') }}</b>
-                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge" data-toggle="modal" data-target="#adicionar-sintoma"><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-sintoma"><i class="fa fa-plus"></i> Adicionar</button>
 
                                 {!! Form::select('idSintoma[]', $sintomas, null,  ['class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idSintoma']) !!}
                                 @if($errors->has('sintoma'))
                                     <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um sintoma</span></span>
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                <b>{{ Form::label('remedio', 'Escolha ao menos um remédio') }}</b>
+                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-remedio"><i class="fa fa-plus"></i> Adicionar</button>
+
+                                {!! Form::select('idRemedio[]', $remedios, null,  ['class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idRemedio']) !!}
+                                @if($errors->has('remedio'))
+                                    <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um remédio</span></span>
                                 @endif
                             </div>
                         </div>
@@ -114,11 +159,9 @@
                             </div>
 
                             <div class="form-group">
-                                <div style="text-align: center;">
-                                    <button class="btn btn-primary btn-lg btn-block">
-                                        <i class="fa fa-plus"></i> Cadastrar Consulta
-                                    </button>
-                                </div>
+                                <button class="btn btn-primary btn-lg btn-block text-center">
+                                    <i class="fa fa-plus"></i> Cadastrar Consulta
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -205,6 +248,44 @@
                             $('#idSintoma').append('<option value="'+data[index].idSintoma+'">'+data[index].nomeSintoma+'</option>');
                         }
                         $("#idSintoma").selectpicker('refresh');
+                    });
+                });
+            }
+        });
+
+        //Adicionar Remédio
+        $(document).ready(function () {
+            $('#add-remedio').on('submit', function(e){
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('remedio.store') }}",
+                    data: $('#add-remedio').serialize(),
+                    success: function (response) {
+                        console.log(response)
+                        $('#adicionar-remedio').modal('hide');
+                        limparCampoRemedio();
+                        alert("Remédio adicionado com sucesso");
+                    },
+                    error: function(error){
+                        console.log(error)
+                        if(error.status == 422) {
+                            alert('Esse remédio já foi adicionado')
+                        } else {
+                            alert('Erro. Fale com o administrador')
+                        }
+                    }
+                });
+            });
+            function limparCampoRemedio(){
+                jQuery(function($){
+                    $.get("{{ route('listaRemedioJson') }}", function(data) {
+                        console.log(data);
+                        $("#idRemedio").empty();
+                        for (index in data) {
+                            $('#idRemedio').append('<option value="'+data[index].idRemedio+'">'+data[index].nomeRemedio+'</option>');
+                        }
+                        $("#idRemedio").selectpicker('refresh');
                     });
                 });
             }

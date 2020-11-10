@@ -15,9 +15,11 @@ class CreateRemediosTable extends Migration
     {
         Schema::create('remedios', function (Blueprint $table) {
             $table->unsignedBigInteger('idRemedio')->primary();
+            $table->unsignedBigInteger('user_id');
             $table->string('nomeRemedio');
-            $table->text('conteudoRemedio');
+            $table->text('conteudoRemedio')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->on('users')->references('id');
         });
     }
 

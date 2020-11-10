@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConsultaRequest;
 use App\Models\Consulta;
 use App\Models\Especialidade;
 use App\Models\Remedio;
 use App\Models\Sintoma;
-use Illuminate\Http\Request;
 
 class ConsultaController extends Controller
 {
@@ -21,7 +21,7 @@ class ConsultaController extends Controller
     /**
      * @var Sintoma
      */
-    private $simtoma;
+    private $sintoma;
     /**
      * @var Remedio
      */
@@ -31,7 +31,7 @@ class ConsultaController extends Controller
         $this->middleware('auth');
         $this->consulta = $consulta;
         $this->especialidade = $especialidade;
-        $this->simtoma = $sintoma;
+        $this->sintoma = $sintoma;
         $this->remedio = $remedio;
     }
 
@@ -44,13 +44,21 @@ class ConsultaController extends Controller
     }
 
     public function create() {
-        $especialidades = $this->especialidade->where('user_id', '=', auth()->user()->id)->pluck('nomeEspecialidade', 'idEspecialidade');
-        $sintomas = $this->simtoma->pluck('nomeSintoma', 'idSintoma');
+        $listaEspecialidades = [];
+        $especialidades = $this->especialidade->where('user_id', '=', auth()->user()->id)->get();
 
-        return view('consulta.create', compact('especialidades', 'sintomas'));
+        /* Monta uma lista de especialidades */
+        foreach($especialidades as $e) { $listaEspecialidades[$e->idEspecialidade] =
+            $e->nomeEspecialidade; $listaEspecialidades = array('' => 'Escolha uma especialidade')+$listaEspecialidades; }
+
+        $sintomas = $this->sintoma->where('user_id', '=', auth()->user()->id)->pluck('nomeSintoma', 'idSintoma');
+        $remedios = $this->remedio->where('user_id', '=', auth()->user()->id)->pluck('nomeRemedio', 'idRemedio');
+
+        return view('consulta.create', compact('listaEspecialidades', 'sintomas', 'remedios'));
     }
 
-    public function store(Request $request) {
-        return $request->all();
+    public function store(ConsultaRequest $request) {
+        $data[] = $request->all();
+        $data['user_id'] = auth()->user()->id;
     }
 }

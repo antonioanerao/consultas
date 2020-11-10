@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\EspecialidadeController;
+use App\Http\Controllers\RemedioController;
 use App\Http\Controllers\SintomaController;
 use App\Http\Controllers\UserController;
 use App\Models\Especialidade;
+use App\Models\Remedio;
 use App\Models\Sintoma;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +37,7 @@ Route::group(['prefix' => 'painel'], function() {
     Route::resource('consulta', ConsultaController::class);
     Route::resource('especialidade', EspecialidadeController::class);
     Route::resource('sintoma', SintomaController::class);
+    Route::resource('remedio', RemedioController::class);
 
     /* Retornos Json */
     Route::get('lista-especialidade-json', function() {
@@ -52,4 +55,12 @@ Route::group(['prefix' => 'painel'], function() {
         }
         return response()->json('error', '200');
     })->name('listaSintomaJson');
+
+    Route::get('lista-remedio-json', function() {
+        if(!auth()->guest()) {
+            $data = Remedio::where('user_id', '=', auth()->user()->id)->orderBy('nomeRemedio', 'desc')->get();
+            return response()->json($data, 200);
+        }
+        return response()->json('error', '200');
+    })->name('listaRemedioJson');
 });
