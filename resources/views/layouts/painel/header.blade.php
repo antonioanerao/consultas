@@ -2,7 +2,7 @@
     <div class="topbar">
         <div class="topbar-left">
             <div class="text-center">
-                <a href="{{ route('home') }}" class="logo">
+                <a href="{{ route('dashboard') }}" class="logo">
                     {{ env('APP_NAME') }}
                 </a>
             </div>

@@ -15,9 +15,10 @@ class CreateSintomasTable extends Migration
     {
         Schema::create('sintomas', function (Blueprint $table) {
             $table->unsignedBigInteger('idSintoma')->primary();
+            $table->unsignedBigInteger('user_id');
             $table->string('nomeSintoma');
-            $table->text('conteudoSintoma');
             $table->timestamps();
+            $table->foreign('user_id')->on('users')->references('id');
         });
     }
 

@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\EspecialidadeController;
+use App\Http\Controllers\SintomaController;
 use App\Http\Controllers\UserController;
 use App\Models\Especialidade;
+use App\Models\Sintoma;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Facades\Route;
 
@@ -24,12 +26,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function() {
+    return redirect(route('dashboard'));
+});
 
 Route::group(['prefix' => 'painel'], function() {
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     Route::resource('consulta', ConsultaController::class);
     Route::resource('especialidade', EspecialidadeController::class);
+    Route::resource('sintoma', SintomaController::class);
 
     /* Retornos Json */
     Route::get('lista-especialidade-json', function() {
@@ -38,5 +43,13 @@ Route::group(['prefix' => 'painel'], function() {
             return response()->json($data, 200);
         }
         return response()->json('error', '200');
-    });
+    })->name('listaEspecialidadeJson');
+
+    Route::get('lista-sintoma-json', function() {
+        if(!auth()->guest()) {
+            $data = Sintoma::where('user_id', '=', auth()->user()->id)->orderBy('nomeSintoma', 'desc')->get();
+            return response()->json($data, 200);
+        }
+        return response()->json('error', '200');
+    })->name('listaSintomaJson');
 });

@@ -49,4 +49,8 @@ class ConsultaController extends Controller
 
         return view('consulta.create', compact('especialidades', 'sintomas'));
     }
+
+    public function store(Request $request) {
+        return $request->all();
+    }
 }

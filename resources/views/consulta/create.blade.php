@@ -5,6 +5,7 @@
 @endsection
 
 @section('modals')
+    <!-- Especialidade -->
     <div id="adicionar-especialidade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -21,6 +22,37 @@
                                 <div class="form-group">
                                     <label for="field-1" class="control-label">Nome Especialidade</label>
                                     <input type="text" required name="nomeEspecialidade" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+
+
+    <!-- Adicionar Sintoma -->
+    <div id="adicionar-sintoma" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Adicionar Novo Sintoma</h4>
+                </div>
+                <form  id="add-sintoma">
+                    {{ csrf_field() }} {{ method_field('POST') }}
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="field-1" class="control-label">Sintoma</label>
+                                    <input type="text" required name="nomeSintoma" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -63,9 +95,9 @@
 
                             <div class="form-group">
                                 <b>{{ Form::label('sintoma', 'Escolha ao menos um sintoma') }}</b>
-                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge" data-toggle="modal" data-target="#con-close-modal"><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge" data-toggle="modal" data-target="#adicionar-sintoma"><i class="fa fa-plus"></i></button>
 
-                                {!! Form::select('idDintoma[]', $sintomas, null,  ['class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false']) !!}
+                                {!! Form::select('idSintoma[]', $sintomas, null,  ['class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idSintoma']) !!}
                                 @if($errors->has('sintoma'))
                                     <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um sintoma</span></span>
                                 @endif
@@ -80,8 +112,15 @@
                                     <br><span class="help-block has-error"><span style="color: red; ">Você deve inserir as informações da consulta</span></span>
                                 @endif
                             </div>
-                        </div>
 
+                            <div class="form-group">
+                                <div style="text-align: center;">
+                                    <button class="btn btn-primary btn-lg btn-block">
+                                        <i class="fa fa-plus"></i> Cadastrar Consulta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 {!! Form::close() !!}
@@ -95,6 +134,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-pt_BR.min.js"></script>
 
     <script type="text/javascript">
+        //Adicionar Especialidade
         $(document).ready(function () {
             $('#add-especialidade').on('submit', function(e){
                 e.preventDefault();
@@ -120,13 +160,51 @@
             });
             function limparCampoEspecialidade(){
                 jQuery(function($){
-                    $.get("/painel/lista-especialidade-json", function(data) {
+                    $.get("{{ route('listaEspecialidadeJson') }}", function(data) {
                         console.log(data);
                         $("#idEspecialidade").empty();
                         for (index in data) {
                             $('#idEspecialidade').append('<option value="'+data[index].idEspecialidade+'">'+data[index].nomeEspecialidade+'</option>');
                         }
                         $("#idEspecialidade").selectpicker('refresh');
+                    });
+                });
+            }
+        });
+
+        //Adicionar Sintoma
+        $(document).ready(function () {
+            $('#add-sintoma').on('submit', function(e){
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('sintoma.store') }}",
+                    data: $('#add-sintoma').serialize(),
+                    success: function (response) {
+                        console.log(response)
+                        $('#adicionar-sintoma').modal('hide');
+                        limparCampoSintoma();
+                        alert("Sintoma adicionado com sucesso");
+                    },
+                    error: function(error){
+                        console.log(error)
+                        if(error.status == 422) {
+                            alert('Esse sintoma já foi adicionado')
+                        } else {
+                            alert('Erro. Fale com o administrador')
+                        }
+                    }
+                });
+            });
+            function limparCampoSintoma(){
+                jQuery(function($){
+                    $.get("{{ route('listaSintomaJson') }}", function(data) {
+                        console.log(data);
+                        $("#idSintoma").empty();
+                        for (index in data) {
+                            $('#idSintoma').append('<option value="'+data[index].idSintoma+'">'+data[index].nomeSintoma+'</option>');
+                        }
+                        $("#idSintoma").selectpicker('refresh');
                     });
                 });
             }
