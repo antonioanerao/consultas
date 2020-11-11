@@ -17,7 +17,6 @@ class CreateConsultasTable extends Migration
             $table->unsignedBigInteger('idConsulta')->primary();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('idEspecialidade');
-            $table->string('nomeConsulta');
             $table->text('conteudoConsulta');
             $table->timestamps();
             $table->foreign('user_id')->on('users')->references('id');

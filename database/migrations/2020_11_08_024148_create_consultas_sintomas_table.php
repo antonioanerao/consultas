@@ -15,9 +15,11 @@ class CreateConsultasSintomasTable extends Migration
     {
         Schema::create('consultas_sintomas', function (Blueprint $table) {
             $table->unsignedBigInteger('idConsultaSintoma')->primary();
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('idSintoma');
             $table->unsignedBigInteger('idConsulta');
             $table->timestamps();
+            $table->foreign('user_id')->on('users')->references('id');
             $table->foreign('idSintoma')->on('sintomas')->references('idSintoma');
             $table->foreign('idConsulta')->on('consultas')->references('idConsulta');
         });

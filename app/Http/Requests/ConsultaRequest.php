@@ -13,7 +13,7 @@ class ConsultaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class ConsultaRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'conteudoConsulta'=>'required|min:10', 'idEspecialidade'=>'required', 'idSintoma'=>'required',
+            'idRemedio'=>'required'
         ];
     }
 }

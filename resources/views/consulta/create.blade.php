@@ -125,15 +125,18 @@
                             <div class="form-group">
                                 <b>{{ Form::label('idEspecialidade', 'Especialidade') }}</b>
                                 <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-especialidade"><i class="fa fa-plus"></i> Adicionar</button>
-                                {!! Form::select('idEspecialidade', $listaEspecialidades, null,  ['class' => 'form-control selectpicker dropup', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idEspecialidade' ]) !!}
+                                {!! Form::select('idEspecialidade', $listaEspecialidades, null,  ['required', 'class' => 'form-control selectpicker dropup', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idEspecialidade' ]) !!}
+                                @if($errors->has('idEspecialidade'))
+                                    <br><span class="help-block has-error"><span style="color: red; ">Escolha a especialidade</span></span>
+                                @endif
                             </div>
 
                             <div class="form-group">
-                                <b>{{ Form::label('sintoma', 'Escolha ao menos um sintoma') }}</b>
+                                <b>{{ Form::label('idSintoma', 'Escolha ao menos um sintoma') }}</b>
                                 <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-sintoma"><i class="fa fa-plus"></i> Adicionar</button>
 
-                                {!! Form::select('idSintoma[]', $sintomas, null,  ['class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idSintoma']) !!}
-                                @if($errors->has('sintoma'))
+                                {!! Form::select('idSintoma[]', $sintomas, null,  ['required', 'class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idSintoma']) !!}
+                                @if($errors->has('idSintoma'))
                                     <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um sintoma</span></span>
                                 @endif
                             </div>
@@ -142,8 +145,8 @@
                                 <b>{{ Form::label('remedio', 'Escolha ao menos um remédio') }}</b>
                                 <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-remedio"><i class="fa fa-plus"></i> Adicionar</button>
 
-                                {!! Form::select('idRemedio[]', $remedios, null,  ['class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idRemedio']) !!}
-                                @if($errors->has('remedio'))
+                                {!! Form::select('idRemedio[]', $remedios, null,  ['required', 'class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idRemedio']) !!}
+                                @if($errors->has('idRemedio'))
                                     <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um remédio</span></span>
                                 @endif
                             </div>
@@ -151,11 +154,12 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <b>{{ Form::label('consulta', 'Informações da consulta') }}</b> <br>
-                                {!! Form::textarea('conteudoConsulta', null,['class'=>'form-control', 'rows'=>10]) !!}
-                                @if($errors->has('consulta'))
-                                    <br><span class="help-block has-error"><span style="color: red; ">Você deve inserir as informações da consulta</span></span>
-                                @endif
+                                <b>{{ Form::label('conteudoConsulta', 'Informações da consulta') }}</b> <br>
+                                {!! Form::textarea('conteudoConsulta', null,['required', 'class'=>'form-control', 'rows'=>10]) !!}
+
+                                @error('conteudoConsulta')
+                                    <span class="help-block has-error"><span style="color: red; ">As informações da consulta devem ter ao menos 10 caracteres</span></span>
+                                @enderror
                             </div>
 
                             <div class="form-group">

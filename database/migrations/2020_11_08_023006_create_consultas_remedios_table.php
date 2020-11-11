@@ -17,9 +17,11 @@ class CreateConsultasRemediosTable extends Migration
             $table->unsignedBigInteger('idConsultaRemedio')->primary();
             $table->unsignedBigInteger('idConsulta');
             $table->unsignedBigInteger('idRemedio');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->foreign('idConsulta')->on('consultas')->references('idConsulta');
             $table->foreign('idRemedio')->on('remedios')->references('idRemedio');
+            $table->foreign('user_id')->on('users')->references('id');
         });
     }
 
