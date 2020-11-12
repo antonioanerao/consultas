@@ -8,7 +8,6 @@ use App\Http\Controllers\UserController;
 use App\Models\Especialidade;
 use App\Models\Remedio;
 use App\Models\Sintoma;
-use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +33,10 @@ Route::get('/home', function() {
 
 Route::group(['prefix' => 'painel'], function() {
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::resource('consulta', ConsultaController::class);
+    Route::get('consulta', [ConsultaController::class, 'index'])->name('consulta.index');
+    Route::get('consulta/create', [ConsultaController::class, 'create'])->name('consulta.create');
+    Route::post('consulta/store', [ConsultaController::class, 'store'])->name('consulta.store');
+    Route::get('consulta/{consulta}/edit', [ConsultaController::class, 'edit'])->name('consulta.edit');
     Route::resource('especialidade', EspecialidadeController::class);
     Route::resource('sintoma', SintomaController::class);
     Route::resource('remedio', RemedioController::class);

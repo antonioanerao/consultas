@@ -55,10 +55,6 @@ class ConsultaController extends Controller
         //
     }
 
-    public function listaEspecialidade() {
-
-    }
-
     public function create() {
         $listaEspecialidades = [];
         $especialidades = $this->especialidade->where('user_id', '=', auth()->user()->id)->get();
@@ -82,36 +78,37 @@ class ConsultaController extends Controller
         try{
             $this->consulta->create($data);
             $idConsulta = DB::getPdo()->lastInsertId();
+
+            if($sintomas) {
+                $contadorSintomas = count($sintomas);
+                for($i=0;$i<$contadorSintomas;$i++) {
+                    $this->consultaSintoma->create([
+                        'user_id' => auth()->user()->id,
+                        'idSintoma'=>$sintomas[$i],
+                        'idConsulta'=>$idConsulta,
+                    ]);
+                }
+            }
+
+            if($remedios) {
+                $contadorRemedios = count($remedios);
+                for($i=0;$i<$contadorRemedios;$i++) {
+                    $this->consultaRemedio->create([
+                        'user_id' => auth()->user()->id,
+                        'idRemedio'=>$remedios[$i],
+                        'idConsulta'=>$idConsulta,
+                    ]);
+                }
+            }
         }catch(\Exception $exception) {
             return back()->with('erro', 'O cadastro falou com o código '. $exception->getCode());
-        }
-
-        if($sintomas) {
-            $contadorSintomas = count($sintomas);
-            for($b=0;$b<$contadorSintomas;$b++) {
-                $this->consultaSintoma->create([
-                    'user_id' => auth()->user()->id,
-                    'idSintoma'=>$sintomas[$b],
-                    'idConsulta'=>$idConsulta,
-                ]);
-            }
-        }
-
-        if($remedios) {
-            $contadorRemedios = count($remedios);
-            for($a=0;$a<$contadorRemedios;$a++) {
-                $this->consultaRemedio->create([
-                    'user_id' => auth()->user()->id,
-                    'idRemedio'=>$remedios[$a],
-                    'idConsulta'=>$idConsulta,
-                ]);
-            }
         }
 
        return redirect(route('consulta.edit', $idConsulta))->with('sucesso', 'Consulta cadastrada com sucesso!');
     }
 
-    public function edit($id) {
-        return view('consulta.edit');
+    public function edit(Consulta $consulta) {
+        $consulta->load(['remedios', 'sintomas']);
+        return view('consulta.edit', compact('consulta'));
     }
 }
