@@ -108,7 +108,7 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('consulta.index') }}">Consultas</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('consulta.index') }}">Minhas Consultass</a></li>
     <li class="breadcrumb-item active">Cadastrar</li>
 @endsection
 
@@ -118,9 +118,6 @@
             <div class="card-box">
                 <h4 class="m-t-0 header-title">Cadastrar Consulta</h4> <hr> <br>
                 {!! Form::open(['route'=>'consulta.store']) !!}
-                <div id="lista-produtos">
-
-                </div>
                     <div class="row clearfix">
                         <div class="col-md-6">
                             <div class="form-group">

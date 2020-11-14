@@ -52,7 +52,8 @@ class ConsultaController extends Controller
     }
 
     public function index() {
-        //
+        $consultas = $this->consulta->all();
+        return view('consulta.index', compact('consultas'));
     }
 
     public function create() {
@@ -110,5 +111,10 @@ class ConsultaController extends Controller
     public function edit(Consulta $consulta) {
         $consulta->load(['remedios', 'sintomas']);
         return view('consulta.edit', compact('consulta'));
+    }
+
+    public function show(Consulta $consulta) {
+        $consulta->load(['remedios', 'sintomas']);
+        return view('consulta.show', compact('consulta'));
     }
 }

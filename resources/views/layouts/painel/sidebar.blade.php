@@ -17,6 +17,7 @@
 
                     </a>
                     <ul class="list-unstyled">
+                        <li><a href="{{ route('consulta.index') }}">Minhas Consultas</a></li>
                         <li><a href="{{ route('consulta.create') }}">Cadastrar</a></li>
                     </ul>
                 </li>

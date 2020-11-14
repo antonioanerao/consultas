@@ -14,6 +14,12 @@ class Consulta extends Model
         'user_id', 'idEspecialidade', 'conteudoConsulta'
     ];
 
+//    protected $appends = ['conteudo_resumido'];
+//    public function getConteudoResumidoAttribute()
+//    {
+//        return str_limit($this->getAttribute('conteudo'), 200, '...');
+//    }
+
     public function remedios() {
         return $this->hasMany(ConsultaRemedio::class, 'idConsulta', 'idConsulta')
             ->join('remedios', 'remedios.idRemedio', '=', 'consultas_remedios.idRemedio');

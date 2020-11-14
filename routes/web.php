@@ -37,6 +37,7 @@ Route::group(['prefix' => 'painel'], function() {
     Route::get('consulta/create', [ConsultaController::class, 'create'])->name('consulta.create');
     Route::post('consulta/store', [ConsultaController::class, 'store'])->name('consulta.store');
     Route::get('consulta/{consulta}/edit', [ConsultaController::class, 'edit'])->name('consulta.edit');
+    Route::get('consulta/{consulta}/show', [ConsultaController::class, 'show'])->name('consulta.show');
     Route::resource('especialidade', EspecialidadeController::class);
     Route::resource('sintoma', SintomaController::class);
     Route::resource('remedio', RemedioController::class);
