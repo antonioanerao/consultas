@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConsultasTable extends Migration
+class CreateComplementoConsultasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateConsultasTable extends Migration
      */
     public function up()
     {
-        Schema::create('consultas', function (Blueprint $table) {
-            $table->unsignedBigInteger('idConsulta')->primary();
+        Schema::create('complemento_consultas', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('idConsulta');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('idEspecialidade');
-            $table->text('conteudoConsulta');
-            $table->dateTime('dataConsulta');
+            $table->text('conteudoComplementoConsulta');
             $table->timestamps();
+            $table->foreign('idConsulta')->on('consultas')->references('idConsulta');
             $table->foreign('user_id')->on('users')->references('id');
-            $table->foreign('idEspecialidade')->on('especialidades')->references('idEspecialidade');
         });
     }
 
@@ -32,6 +31,6 @@ class CreateConsultasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consultas');
+        Schema::dropIfExists('complemento_consultas');
     }
 }

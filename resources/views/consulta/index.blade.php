@@ -43,7 +43,7 @@
                     @foreach($consultas as $consulta)
                         <tbody>
                             <td>
-                                #{{ $consulta->created_at->format('Y') . $consulta->idConsulta . ' em ' . $consulta->created_at->format('d/m/Y') . ' às ' . $consulta->created_at->format('H:i') . 'h' }}
+                                #{{ $consulta->dataConsulta->format('Y') . $consulta->idConsulta . ' em ' . $consulta->dataConsulta->format('d/m/Y') . ' às ' . $consulta->dataConsulta->format('H:i') . 'h' }}
                             </td>
                             <td>{{ $consulta->especialidade->nomeEspecialidade }}</td>
                             <td>

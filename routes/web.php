@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComplementoConsultaController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\RemedioController;
@@ -41,6 +42,8 @@ Route::group(['prefix' => 'painel'], function() {
     Route::resource('especialidade', EspecialidadeController::class);
     Route::resource('sintoma', SintomaController::class);
     Route::resource('remedio', RemedioController::class);
+
+    Route::post('consulta/{consulta}/complemento/store', [ComplementoConsultaController::class, 'store'])->name('complemento.store');
 
     /* Retornos Json */
     Route::get('lista-especialidade-json', function() {

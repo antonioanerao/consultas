@@ -48,6 +48,32 @@
                         </div>
                     </div>
                 </div>
+                <br>
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        <div class="card-box">
+                            <h5 class="m-t-0 header-title">Complementos da Consulta</h5> <hr>
+
+                            <form method="post" action="{{ route('complemento.store', $consulta->idConsulta) }}">
+                            {{ csrf_field() }} {{ method_field('POST') }}
+
+                            <div class="form-group">
+                                {!! Form::textarea('conteudoComplementoConsulta', null,  ['required', 'class' => 'form-control', 'id'=>'conteudoComplementoConsulta' ]) !!}
+                                @if($errors->has('conteudoComplementoConsulta'))
+                                    <br><span class="help-block has-error"><span style="color: red; ">Informe o conteudo da consulta</span></span>
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-lg btn-block text-center">
+                                    <i class="fa fa-plus"></i> Cadastrar Complemento
+                                </button>
+                            </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

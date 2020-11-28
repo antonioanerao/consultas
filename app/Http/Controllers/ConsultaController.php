@@ -102,7 +102,7 @@ class ConsultaController extends Controller
                 }
             }
         }catch(\Exception $exception) {
-            return back()->with('erro', 'O cadastro falou com o código '. $exception->getCode());
+            return back()->with('erro', 'O cadastro falhou com o código ' . $exception->getCode());
         }
 
        return redirect(route('consulta.edit', $idConsulta))->with('sucesso', 'Consulta cadastrada com sucesso!');

@@ -3,6 +3,11 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="{{ asset('dashboard/assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css') }}">
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+    <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
 @endsection
 
 @section('modals')
@@ -35,7 +40,6 @@
             </div>
         </div>
     </div><!-- /.modal -->
-
 
     <!-- Adicionar Sintoma -->
     <div id="adicionar-sintoma" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -144,6 +148,16 @@
                                 <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-remedio"><i class="fa fa-plus"></i> Adicionar</button>
 
                                 {!! Form::select('idRemedio[]', $remedios, null,  ['required', 'class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idRemedio']) !!}
+                                @if($errors->has('idRemedio'))
+                                    <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um remédio</span></span>
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                <b>{{ Form::label('remedio', 'Escolha ao menos um remédio') }}</b>
+                                <button type="button" class="btn btn-success waves-effect waves-light btn-sm badge pull-right" data-toggle="modal" data-target="#adicionar-remedio"><i class="fa fa-plus"></i> Adicionar</button>
+
+                                {!! Form::date('idRemedio[]', null,  ['required', 'class' => 'form-control selectpicker dropup', 'multiple' => 'true', 'data-size'=>'8', 'data-live-search'=>'true', 'data-dropup-auto'=>'false', 'id'=>'idRemedio']) !!}
                                 @if($errors->has('idRemedio'))
                                     <br><span class="help-block has-error"><span style="color: red; ">Escolha ao menos um remédio</span></span>
                                 @endif
