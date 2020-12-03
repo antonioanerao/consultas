@@ -76,6 +76,9 @@ class ConsultaController extends Controller
         $sintomas = request('idSintoma');
         $remedios = request('idRemedio');
 
+        $data['dataConsulta'] = $data['diaConsulta'] . ' ' . $data['horaConsulta'];
+
+
         try{
             $this->consulta->create($data);
             $idConsulta = DB::getPdo()->lastInsertId();

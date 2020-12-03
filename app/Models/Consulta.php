@@ -14,14 +14,13 @@ class Consulta extends Model
 
     protected $primaryKey = 'idConsulta';
     protected $fillable = [
-        'user_id', 'idEspecialidade', 'conteudoConsulta'
+        'user_id', 'idEspecialidade', 'conteudoConsulta', 'dataConsulta'
     ];
-
-//    protected $appends = ['conteudo_resumido'];
-//    public function getConteudoResumidoAttribute()
-//    {
-//        return str_limit($this->getAttribute('conteudo'), 200, '...');
-//    }
+    protected $casts = [
+        'created_at' => 'datetime:d/m/Y H:s',
+        'updated_at' => 'datetime:d/m/Y H:s',
+        'dataConsulta' => 'datetime:d/m/Y H:s',
+    ];
 
     public function remedios() {
         return $this->hasMany(ConsultaRemedio::class, 'idConsulta', 'idConsulta')
