@@ -87,6 +87,13 @@
     </script>
 @endif
 
+@if(session()->get('aviso'))
+    <script>
+        window.onload = notify;
+        function notify(){$.Notification.notify('warning','botton right', 'ATENÇÃO', '{{ session()->get('aviso') }}')}
+    </script>
+@endif
+
 @yield('js')
 
 </body>

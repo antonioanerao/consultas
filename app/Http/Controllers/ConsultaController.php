@@ -9,6 +9,7 @@ use App\Models\ConsultaSintoma;
 use App\Models\Especialidade;
 use App\Models\Remedio;
 use App\Models\Sintoma;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ConsultaController extends Controller
@@ -119,5 +120,21 @@ class ConsultaController extends Controller
     public function show(Consulta $consulta) {
         $consulta->load(['remedios', 'sintomas']);
         return view('consulta.show', compact('consulta'));
+    }
+
+    public function update(Consulta $consulta, Request $request) {
+        DB::beginTransaction();
+        if($consulta->conteudoConsulta == $request->input('conteudoConsulta')) {
+            return back()->with('aviso', 'Você não informou nenhum valor diferente do atual');
+        }
+        try{
+            $this->consulta->findOrFail($consulta->idConsulta)->update($request->all());
+            DB::commit();
+        }catch(\Exception $exception) {
+            DB::rollBack();
+            return $exception->getMessage();
+        }
+
+        return back()->with('sucesso', 'Informações atualizadas com sucesso');
     }
 }

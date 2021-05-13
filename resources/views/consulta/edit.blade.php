@@ -6,62 +6,54 @@
 @endsection
 
 @section('title')
-    Cadastrar Consulta
+    Consulta #{{ $consulta->idConsulta }}
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('consulta.index') }}">Consultas</a></li>
-    <li class="breadcrumb-item active">Cadastrar</li>
+    <li class="breadcrumb-item"><a href="{{ route('consulta.index') }}">Minhas Consultas</a></li>
+    <li class="breadcrumb-item active">Consula #{{ $consulta->created_at->format('Y') . $consulta->idConsulta }}</li>
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card-box">
-                <h4 class="m-t-0 header-title">Lista de Fatos</h4>
-                <br>
-                <table class="table align-center table-bordered table-striped table-hover js-basic-example dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
-                    <thead>
-                    <tr role="row">
-                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" aria-sort="ascending" aria-label="ID" style="width: 20px;">
-                            Consulta
-                        </th>
-                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" aria-sort="ascending" aria-label="ID" style="width: 10px;">
-                            Especialidade
-                        </th>
-                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" aria-sort="ascending" aria-label="ID" style="width: 10px;">
-                            Sintomas
-                        </th>
-                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" aria-sort="ascending" aria-label="ID" style="width: 10px;">
-                            Remédios
-                        </th>
+                <h4 class="m-t-0 header-title">
+                    Consulta com #{{ $consulta->especialidade->nomeEspecialidade }}
+                </h4>
+                <hr> <br>
 
-                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" aria-sort="ascending" aria-label="ID" style="width: 10px;">
-                            #
-                        </th>
-                    </tr>
-                    </thead>
+                <div class="row clearfix">
+                    <div class="col-md-4">
+                        <div class="card-box">
+                            <h5 class="m-t-0 header-title">Sintomas</h5> <hr>
+                            @foreach($consulta->sintomas as $sintomas)
+                                <span class="badge badge-primary">{{ $sintomas->nomeSintoma }}</span>
+                            @endforeach <hr> <br>
 
-                    <tbody>
-                        <td>{{ $consulta->conteudoConsulta }}</td>
-                        <td>{{ $consulta->especialidade->nomeEspecialidade }}</td>
-
-                        <td>
-                            @foreach($consulta->sintomas as $sintoma)
-                                {{ $sintoma->nomeSintoma }}
-                            @endforeach
-                        </td>
-
-                        <td>
+                            <h5 class="m-t-0 header-title">Remédios</h5> <hr>
                             @foreach($consulta->remedios as $remedios)
-                                {{ $remedios->nomeRemedio }} /
+                                <span class="badge badge-warning">{{ $remedios->nomeRemedio }}</span>
                             @endforeach
-                        </td>
+                        </div>
+                    </div>
 
-                        <td></td>
+                    <div class="col-md-8">
+                        <div class="card-box">
+                            <h5 class="m-t-0 header-title">Informações Gerais</h5> <hr>
 
-                    </tbody>
-                </table>
+                            {{ Form::open(['route'=>['consulta.update', $consulta->idConsulta]]) }}
+                            <label>Dados da consulta</label>
+                            <textarea name="conteudoConsulta" class="form-control" rows="12">{!! $consulta->conteudoConsulta !!}</textarea>
+
+                            <label></label>
+                            <button class="btn btn-primary btn-lg btn-block">
+                                <i class="fa fa-refresh"></i> Atualizar
+                            </button>
+                            {{ Form::close() }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -76,120 +68,4 @@
     <script src="{{ asset('dashboard/assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/js/pages/tables/jquery-datatable.js') }}"></script>
     <script src="{{ asset('dashboard/assets/bundles/mainscripts.bundle.js') }}"></script>
-
-    <script type="text/javascript">
-        //Adicionar Especialidade
-        $(document).ready(function () {
-            $('#add-especialidade').on('submit', function(e){
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('especialidade.store') }}",
-                    data: $('#add-especialidade').serialize(),
-                    success: function (response) {
-                        console.log(response)
-                        $('#adicionar-especialidade').modal('hide');
-                        limparCampoEspecialidade();
-                        alert("Especialidade adicionada com sucesso");
-                    },
-                    error: function(error){
-                        console.log(error)
-                        if(error.status == 422) {
-                            alert('Essa especialidade já foi adicionada')
-                        } else {
-                            alert('Erro. Fale com o administrador')
-                        }
-                    }
-                });
-            });
-            function limparCampoEspecialidade(){
-                jQuery(function($){
-                    $.get("{{ route('listaEspecialidadeJson') }}", function(data) {
-                        console.log(data);
-                        $("#idEspecialidade").empty();
-                        for (index in data) {
-                            $('#idEspecialidade').append('<option value="'+data[index].idEspecialidade+'">'+data[index].nomeEspecialidade+'</option>');
-                        }
-                        $("#idEspecialidade").selectpicker('refresh');
-                    });
-                });
-            }
-        });
-
-        //Adicionar Sintoma
-        $(document).ready(function () {
-            $('#add-sintoma').on('submit', function(e){
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('sintoma.store') }}",
-                    data: $('#add-sintoma').serialize(),
-                    success: function (response) {
-                        console.log(response)
-                        $('#adicionar-sintoma').modal('hide');
-                        limparCampoSintoma();
-                        alert("Sintoma adicionado com sucesso");
-                    },
-                    error: function(error){
-                        console.log(error)
-                        if(error.status == 422) {
-                            alert('Esse sintoma já foi adicionado')
-                        } else {
-                            alert('Erro. Fale com o administrador')
-                        }
-                    }
-                });
-            });
-            function limparCampoSintoma(){
-                jQuery(function($){
-                    $.get("{{ route('listaSintomaJson') }}", function(data) {
-                        console.log(data);
-                        $("#idSintoma").empty();
-                        for (index in data) {
-                            $('#idSintoma').append('<option value="'+data[index].idSintoma+'">'+data[index].nomeSintoma+'</option>');
-                        }
-                        $("#idSintoma").selectpicker('refresh');
-                    });
-                });
-            }
-        });
-
-        //Adicionar Remédio
-        $(document).ready(function () {
-            $('#add-remedio').on('submit', function(e){
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('remedio.store') }}",
-                    data: $('#add-remedio').serialize(),
-                    success: function (response) {
-                        console.log(response)
-                        $('#adicionar-remedio').modal('hide');
-                        limparCampoRemedio();
-                        alert("Remédio adicionado com sucesso");
-                    },
-                    error: function(error){
-                        console.log(error)
-                        if(error.status == 422) {
-                            alert('Esse remédio já foi adicionado')
-                        } else {
-                            alert('Erro. Fale com o administrador')
-                        }
-                    }
-                });
-            });
-            function limparCampoRemedio(){
-                jQuery(function($){
-                    $.get("{{ route('listaRemedioJson') }}", function(data) {
-                        console.log(data);
-                        $("#idRemedio").empty();
-                        for (index in data) {
-                            $('#idRemedio').append('<option value="'+data[index].idRemedio+'">'+data[index].nomeRemedio+'</option>');
-                        }
-                        $("#idRemedio").selectpicker('refresh');
-                    });
-                });
-            }
-        });
-    </script>
 @endsection

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property mixed idConsulta
+ * @method findOrFail(mixed $idConsulta)
  */
 class Consulta extends Model
 {
