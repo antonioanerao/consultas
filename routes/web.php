@@ -6,6 +6,7 @@ use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\RemedioController;
 use App\Http\Controllers\SintomaController;
 use App\Http\Controllers\UserController;
+use App\Models\ComplementoConsulta;
 use App\Models\Especialidade;
 use App\Models\Remedio;
 use App\Models\Sintoma;
@@ -40,6 +41,9 @@ Route::group(['prefix' => 'painel'], function() {
     Route::get('consulta/{consulta}/edit', [ConsultaController::class, 'edit'])->name('consulta.edit');
     Route::get('consulta/{consulta}/show', [ConsultaController::class, 'show'])->name('consulta.show');
     Route::post('consulta/{consulta}/update', [ConsultaController::class, 'update'])->name('consulta.update');
+    /* Remover Complemento de Consulta */
+    Route::delete('consulta/complemento/remover/{id}', [ComplementoConsulta::class, 'destroy'])
+        ->name('consulta.complemento.destroy')->middleware('auth');
     Route::resource('especialidade', EspecialidadeController::class);
     Route::resource('sintoma', SintomaController::class);
     Route::resource('remedio', RemedioController::class);

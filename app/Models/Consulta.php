@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use http\QueryString;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,5 +36,9 @@ class Consulta extends Model
 
     public function especialidade() {
         return $this->hasOne(Especialidade::class, 'idEspecialidade', 'idEspecialidade');
+    }
+
+    public function complementos() {
+        return $this->hasMany(ComplementoConsulta::class, 'idConsulta', 'idConsulta');
     }
 }

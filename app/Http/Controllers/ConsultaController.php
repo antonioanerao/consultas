@@ -125,7 +125,9 @@ class ConsultaController extends Controller
     public function update(Consulta $consulta, Request $request) {
         DB::beginTransaction();
         if($consulta->conteudoConsulta == $request->input('conteudoConsulta')) {
-            return back()->with('aviso', 'Você não informou nenhum valor diferente do atual');
+            return back()->with('aviso', 'Você não informou nenhuma informação diferente da atual.');
+        } elseif ($request->input('conteudoConsulta') == '') {
+            return back()->with('aviso', 'Você não pode deixar este campo em branco.');
         }
         try{
             $this->consulta->findOrFail($consulta->idConsulta)->update($request->all());
