@@ -119,7 +119,8 @@ class ConsultaController extends Controller
 
     public function show(Consulta $consulta) {
         $consulta->load(['remedios', 'sintomas']);
-        return view('consulta.show', compact('consulta'));
+        $sintomas = $this->sintoma->where('user_id', '=', auth()->user()->id)->pluck('nomeSintoma', 'idSintoma');
+        return view('consulta.show', compact('consulta', 'sintomas'));
     }
 
     public function update(Consulta $consulta, Request $request) {

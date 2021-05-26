@@ -50,6 +50,8 @@ Route::group(['prefix' => 'painel'], function() {
 
     Route::post('consulta/{consulta}/complemento/store', [ComplementoConsultaController::class, 'store'])->name('complemento.store');
 
+    Route::post('consulta/add-sintomas/{idConsulta}', [SintomaController::class, 'associarSintomaConsulta'])->name('associarSintomaConsulta');
+
     /* Retornos Json */
     Route::get('lista-especialidade-json', function() {
         if(!auth()->guest()) {
